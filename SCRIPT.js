@@ -196,7 +196,7 @@ if (!/^https?:\/\/([a-z0-9-]+\.)?khanacademy\.org/.test(window.location.href)) {
     await hideSplashScreen();
 
     setupMain();
-    sendToast("🤍｜Khan Destroyer iniciado!");
+    sendToast("DHONATAN MODDER INICIOU SEU CHEAT NO KHAN🔥!");
     console.clear();
   })();
 }
