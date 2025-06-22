@@ -32,12 +32,10 @@ class EventEmitter {
 
 const plppdo = new EventEmitter();
 
-// Observer otimizado
-new MutationObserver(mutationsList => 
+new MutationObserver(mutationsList =>
   mutationsList.some(m => m.type === 'childList') && plppdo.emit('domChanged')
 ).observe(document.body, { childList: true, subtree: true });
 
-// Funções helpers
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 const findAndClickBySelector = selector => document.querySelector(selector)?.click();
 
@@ -83,18 +81,15 @@ async function loadCss(url) {
 }
 
 function setupMain() {
-
   const originalFetch = window.fetch;
-  
-  window.fetch = async function(input, init) {
 
+  window.fetch = async function(input, init) {
     let body;
     if (input instanceof Request) {
       body = await input.clone().text();
     } else if (init?.body) {
       body = init.body;
     }
-
 
     if (body?.includes('"operationName":"updateUserVideoProgress"')) {
       try {
@@ -110,15 +105,12 @@ function setupMain() {
           } else {
             init.body = body;
           }
-          
           sendToast("🔄｜Vídeo exploitado.", 1000);
         }
       } catch (e) {}
     }
 
-   
     const originalResponse = await originalFetch.apply(this, arguments);
-    
 
     try {
       const clonedResponse = originalResponse.clone();
@@ -161,7 +153,6 @@ function setupMain() {
     return originalResponse;
   };
 
-
   (async () => {
     const selectors = [
       `[data-testid="choice-icon__library-choice-icon"]`,
@@ -176,7 +167,6 @@ function setupMain() {
     while (window.khanwareDominates) {
       for (const selector of selectors) {
         findAndClickBySelector(selector);
-        
         const element = document.querySelector(`${selector}> div`);
         if (element?.innerText === "Mostrar resumo") {
           sendToast("🎉｜Exercício concluído!", 3000);
@@ -187,20 +177,24 @@ function setupMain() {
   })();
 }
 
-if (!/^https?:\/\/([a-z0-9-]+\.)?khanacademy\.org/.test(window.location.href)) { window.location.href = "https://pt.khanacademy.org/";
+if (!/^https?:\/\/([a-z0-9-]+\.)?khanacademy\.org/.test(window.location.href)) {
+  window.location.href = "https://pt.khanacademy.org/";
 } else {
   (async function init() {
     await showSplashScreen();
-    
+
     await Promise.all([
-      loadScript('https://cdn.jsdelivr.net/npm/darkreader@4.9.92/darkreader.min.js', 'darkReaderPlugin').then(()=>{ DarkReader.setFetchMethod(window.fetch); DarkReader.enable(); }),
+      loadScript('https://cdn.jsdelivr.net/npm/darkreader@4.9.92/darkreader.min.js', 'darkReaderPlugin').then(() => {
+        DarkReader.setFetchMethod(window.fetch);
+        DarkReader.enable();
+      }),
       loadCss('https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css'),
       loadScript('https://cdn.jsdelivr.net/npm/toastify-js', 'toastifyPlugin')
     ]);
-    
+
     await delay(2000);
     await hideSplashScreen();
-    
+
     setupMain();
     sendToast("🤍｜Khan Destroyer iniciado!");
     console.clear();
